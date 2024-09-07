@@ -44,37 +44,42 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         $_SESSION['userType'] = $usertype;
                         echo "Login successful!";
                         header("Location: dashboard/dashboard.html");
-                        exit();
+            
                     } else {
                         $error = "Invalid password.";
                         header("Location: submit_signin.html");
-                        exit();
+            
                     }
                 } else {
                     $error = "Invalid username.";
                     header("Location: submit_signin.html");
-                    exit();
+        
                 }
             }
             $stmt->close();       
         } else if(empty($username)){
             echo "Invalid username!";
             header("Location: submit_signin.html");
-            exit();
+
         } else if(empty($password)){
             echo "Invalid password!";
             header("Location: submit_signin.html");
-            exit();
+
         } else if(empty($usertype)){
             echo "Invalid user type!";
             header("Location: submit_signin.html");
-            exit();
+
         }
     } else {
         header("Location: submit_signin.html");
-        exit();
 }
 
+if (!empty($error)) {
+    // Embed JavaScript that triggers an alert in the HTML
+    echo "<script type='text/javascript'>alert('" . addslashes($error) . "');</script>";
+}
+
+exit();
 $conn->close();
 header("Location: index.html");
 ?>
