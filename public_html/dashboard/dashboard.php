@@ -15,7 +15,9 @@ if (isset($_SESSION['username'])) {
 <!DOCTYPE html>
 <html lang="en">
     <head>
-
+        <title>Dashboard</title>
     </head>
-
+    <body>
+        This is the dashboard.
+    </body>
 </html>
