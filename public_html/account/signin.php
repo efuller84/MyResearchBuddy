@@ -75,7 +75,6 @@ if (!empty($error)) {
     </script>";
 }
 
-exit();
 $conn->close();
 ?>
 
