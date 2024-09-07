@@ -5,10 +5,22 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simple PHP MySQL Website</title>
+    <script>
+        function showAlert(message) {
+            if (message !== "") {
+                alert(message);
+            }
+        }
+    </script>
 </head>
 <body>
     <h2>Sign In</h2>
     <form action="submit.php" method="post">
+        <label for="userTypeS">Student: </label>
+        <input type="radio" id="userTypeS" name="userType">
+        <label for="userTypeP">Professor: </label>
+        <input type="radio" id="userTypeP" name="userType">  
+        <br><br>      
         <label for="username">Username:</label>
         <input type="text" name="username" id="username" required>
         <br><br>
@@ -17,5 +29,11 @@
         <br><br>
         <input type="submit" value="Sign In">
     </form>
+
+    <script>
+        // Pass the PHP error message to JavaScript
+        var errorMessage = "<?php echo $error; ?>";
+        showAlert(errorMessage);
+    </script>
 </body>
 </html>

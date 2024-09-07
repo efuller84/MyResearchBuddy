@@ -13,18 +13,43 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Insert form data into the database
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = $_POST['username'];
-    $email = $_POST['email'];
+    // Check if the username and password are set
+    if (isset($_POST['username']) && isset($_POST['password'])) {
+        $username = trim($_POST['username']);
+        $password = trim($_POST['password']);
 
-    $sql = "INSERT INTO users (username, email) VALUES ('$username', '$email')";
+        // Check if both fields are not empty
+        if (!empty($username) && !empty($password) && isset($_POST['userType'])) {
+            $stmt = $conn->prepare("SELECT password FROM users WHERE username = ?");
+            $stmt->bind_param("s", $username); // "s" means the parameter is a string
+            $stmt->execute();
+            $stmt->store_result();
 
-    if ($conn->query($sql) === TRUE) {
-        echo "New user registered successfully";
+            // Check if the user exists
+            if ($stmt->num_rows > 0) {
+                // Bind result to a variable
+                $stmt->bind_result($hashed_password);
+                $stmt->fetch();
+
+                // Verify the password (assuming passwords are hashed)
+                if (password_verify($password, $hashed_password)) {
+                    echo "Login successful!";
+                } else {
+                    $error = "Invalid password.";
+                }
+            } else {
+                $error = "Invalid username.";
+            }
+            $stmt->close();       
+        } else {
+            echo "Both Username and Password must be filled out.";
+        }
     } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
+        echo "Username and Password fields are required.";
     }
+} else {
+    echo "Invalid request method.";
 }
 
 $conn->close();
