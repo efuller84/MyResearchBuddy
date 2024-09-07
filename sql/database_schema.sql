@@ -12,7 +12,8 @@ CREATE TABLE Students (
     student_id INT PRIMARY KEY,
     resume_link VARCHAR(255),
     transcript_link VARCHAR(255),
-    experience SET('Internship', 'Research', 'Job') 
+    tags VARCHAR(255),
+    field_of_research VARCHAR(255) -- Figure out this number
 );
 
 ALTER TABLE Students
@@ -30,7 +31,8 @@ CREATE TABLE Projects (
     professor_id INT,
     project_name VARCHAR(100) NOT NULL,
     project_type VARCHAR(50),
-    prerequisites SET('Internship', 'Research', 'Job'), -- Must match experience in Students table
+    prerequisites VARCHAR(255), -- Figure out this number 
+    tags VARCHAR(255),
     capacity_current INT DEFAULT 0,
     capacity_total INT,
     FOREIGN KEY (professor_id) REFERENCES Professors(professor_id)
