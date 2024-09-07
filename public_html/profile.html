@@ -6,7 +6,6 @@
 </head>
 <body>
      <!-- NEED TO FIND OUT HOW TO GRAB USERNAME AND DETAILS -->
-     <h1> Profile for - USER </h1>
      <script>
        document.addEventListener("DOMCONTENTLOAD", function() {
        function fetchData() {
@@ -14,12 +13,18 @@
                .then(response => response.json())
                .then(data => {
                     document.getElementById('name').textContent = data.name;
-                    document.getElementById('username').textContent = data.name;
+                    document.getElementById('username').textContent = data.username;
+                    document.getElementById('email').textContent = data.email;
           })
           .catch(error => console.error('An error occurred with your account', error));
        }
        fetchData();
        });
      </script>
+
+     <h1> Profile for <span id = "name"></span> </h1>
+     <p> Email: <span id = "email"></span></p>
+     <p> Username: <span id = "username"></span></p>
+
 </body>
 </html>
