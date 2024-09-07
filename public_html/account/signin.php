@@ -83,3 +83,32 @@ exit();
 $conn->close();
 header("Location: index.html");
 ?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In</title>
+</head>
+<body>
+    <h2>Sign In</h2>
+    <form action="" method="post">
+        <label for="userTypeS">Student: </label>
+        <input type="radio" id="userTypeS" name="userType">
+        <label for="userTypeP">Professor: </label>
+        <input type="radio" id="userTypeP" name="userType">
+        <br><br>
+        <label for="username">Username:</label>
+        <input type="text" name="username" id="username" required>
+        <br><br>
+        <label for="password">Password:</label>
+        <input type="password" name="password" id="password" required>
+        <br><br>
+        <input type="submit" value="Sign In">
+    </form>
+    <br>
+    <p>No account? Sign up <a href="signup.html">here</a>.</p>
+</body>
+</html>
