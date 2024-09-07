@@ -48,38 +48,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             
                     } else {
                         $error = "Invalid password.";
-                        header("Location: signup.php");
                         exit();
             
                     }
                 } else {
                     $error = "Invalid username.";
-                    header("Location: signup.php");
                     exit();
                 }
             }
             $stmt->close();       
         } else if(empty($username)){
-            echo "Invalid username!";
-            header("Location: signup.php");
-            exit();
+            $error = "Invalid username!";
 
         } else if(empty($password)){
-            echo "Invalid password!";
-            header("Location: signup.php");
-            exit();
+            $error = "Invalid password!";
 
         } else if(empty($usertype)){
-            echo "Invalid user type!";
-            header("Location: signup.php");
-            exit();
+            $error = "Invalid user type!";
         }
     }
 
 if (!empty($error)) {
-    echo "<script type='text/javascript'>alert('" . addslashes($error) . "');</script>";
-    header("Location: signin.php?error=" . urlencode($error));
-    exit();
+    echo "<script type='text/javascript'>
+        alert('" . addslashes($error) . "');
+        window.location.href = 'signin.php?error=" . urlencode($error) . "';
+    </script>";
 }
 
 exit();
