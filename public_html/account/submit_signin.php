@@ -40,7 +40,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
                     // Verify the password (assuming passwords are hashed)
                     if (password_verify($password, $hashed_password)) {
+                        $_SESSION['username'] = $username;
+                        $_SESSION['userType'] = $usertype;
                         echo "Login successful!";
+                        header("Location: dashboard/dashboard.html");
+                        exit();
                     } else {
                         $error = "Invalid password.";
                         header("Location: submit_signin.html");
