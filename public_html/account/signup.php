@@ -154,6 +154,6 @@ $conn->close();
         <input type="submit" value="Sign Up">
     </form>
     <br>
-    <p>If you have an account, please <a href="signin.html">sign in</a>.</p>
+    <p>If you have an account, please <a href="signin.php">sign in</a>.</p>
 </body>
 </html>

@@ -1,7 +1,7 @@
 <?php
 session_start();
 // Database connection
-$servername = "localhost";
+$servername = "127.0.0.1";
 $username = "root";
 $password = "";
 $dbname = "my_database";
@@ -24,9 +24,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Check if fields are not empty
         if (!empty($username) && !empty($password) && !empty($usertype)) {
             if($usertype == "userTypeS") {
-                $stmt = $conn->prepare("SELECT password FROM Students WHERE username = ?");
+                $stmt = $conn->prepare("SELECT s_password FROM Students WHERE s_name = ?");
             } else {
-                $stmt = $conn->prepare("SELECT password FROM Professors WHERE username = ?");
+                $stmt = $conn->prepare("SELECT p_password FROM Professors WHERE p_name = ?");
             }
                 $stmt->bind_param("s", $username); // "s" means the parameter is a string
                 $stmt->execute();
@@ -43,45 +43,47 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         $_SESSION['username'] = $username;
                         $_SESSION['userType'] = $usertype;
                         echo "Login successful!";
-                        header("Location: dashboard/dashboard.html");
+                        header("Location: dashboard/dashboard.php");
+                        exit();
             
                     } else {
                         $error = "Invalid password.";
-                        header("Location: submit_signin.html");
+                        header("Location: signup.php");
+                        exit();
             
                     }
                 } else {
                     $error = "Invalid username.";
-                    header("Location: submit_signin.html");
-        
+                    header("Location: signup.php");
+                    exit();
                 }
             }
             $stmt->close();       
         } else if(empty($username)){
             echo "Invalid username!";
-            header("Location: submit_signin.html");
+            header("Location: signup.php");
+            exit();
 
         } else if(empty($password)){
             echo "Invalid password!";
-            header("Location: submit_signin.html");
+            header("Location: signup.php");
+            exit();
 
         } else if(empty($usertype)){
             echo "Invalid user type!";
-            header("Location: submit_signin.html");
-
+            header("Location: signup.php");
+            exit();
         }
-    } else {
-        header("Location: submit_signin.html");
-}
+    }
 
 if (!empty($error)) {
-    // Embed JavaScript that triggers an alert in the HTML
     echo "<script type='text/javascript'>alert('" . addslashes($error) . "');</script>";
+    header("Location: signin.php?error=" . urlencode($error));
+    exit();
 }
 
 exit();
 $conn->close();
-header("Location: index.html");
 ?>
 
 <!DOCTYPE html>
