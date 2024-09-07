@@ -7,7 +7,7 @@
     <title>Simple PHP MySQL Website</title>
 </head>
 <body>
-    <h2>User Registration</h2>
+    <h2>Sign Up</h2>
     <form action="submit.php" method="post">
         <label for="username">Username:</label>
         <input type="text" name="username" id="username" required>
@@ -15,15 +15,13 @@
         <label for="email">Email:</label>
         <input type="email" name="email" id="email" required>
         <br><br>
-        <input type="submit" value="Register">
+        <label for="password">Password:</label>
+        <input type="password" name="password" id="password" required>
+        <br><br>
+        <label for="password">Re-enter Password:</label>
+        <input type="password" name="password" id="password" required>
+        <br><br>
+        <input type="submit" value="Sign Up">
     </form>
-
-    <h2>Registered Users:</h2>
-    <ul>
-        <?php
-        // Fetch and display all users from the database
-        include 'fetch_users.php';
-        ?>
-    </ul>
 </body>
 </html>
