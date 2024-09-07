@@ -14,39 +14,51 @@ if ($conn->connect_error) {
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Check if the username and password are set
-    if (isset($_POST['username']) && isset($_POST['password'])) {
+    // Check if username, password, and userType are set
+    if (isset($_POST['username'], $_POST['password'], $_POST['userType'])) {
         $username = trim($_POST['username']);
         $password = trim($_POST['password']);
+        $userType = trim($_POST['userType']);
 
-        // Check if both fields are not empty
-        if (!empty($username) && !empty($password) && isset($_POST['userType'])) {
-            $stmt = $conn->prepare("SELECT password FROM users WHERE username = ?");
-            $stmt->bind_param("s", $username); // "s" means the parameter is a string
+        // Ensure that none of the fields are empty
+        if (!empty($username) && !empty($password) && !empty($userType)) {
+            // Check if the username already exists
+            $stmt = $conn->prepare("SELECT id FROM users WHERE username = ?");
+            $stmt->bind_param("s", $username);
             $stmt->execute();
             $stmt->store_result();
 
-            // Check if the user exists
             if ($stmt->num_rows > 0) {
-                // Bind result to a variable
-                $stmt->bind_result($hashed_password);
-                $stmt->fetch();
-
-                // Verify the password (assuming passwords are hashed)
-                if (password_verify($password, $hashed_password)) {
-                    echo "Login successful!";
-                } else {
-                    $error = "Invalid password.";
-                }
+                // Username is already taken
+                $error = "Username already exists. Please choose a different username.";
             } else {
-                $error = "Invalid username.";
+                // Hash the password
+                $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+                // Insert the new user into the database
+                $stmt = $conn->prepare("INSERT INTO users (username, password, userType) VALUES (?, ?, ?)");
+                $stmt->bind_param("sss", $username, $hashed_password, $userType);
+
+                if ($stmt->execute()) {
+                    echo "Sign-up successful! You can now log in.";
+                    // Optionally, redirect to the login page
+                    // header("Location: login.php");
+                    // exit;
+                } else {
+                    $error = "Error signing up. Please try again.";
+                }
             }
-            $stmt->close();       
+
+            $stmt->close();
         } else {
-            echo "Both Username and Password must be filled out.";
+            $error = "All fields (Username, Password, and User Type) are required.";
         }
     } else {
-        echo "Username and Password fields are required.";
+        $error = "Username, Password, and User Type fields are required.";
+    }
+
+    if (isset($error)) {
+        echo $error;
     }
 } else {
     echo "Invalid request method.";
@@ -55,4 +67,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 $conn->close();
 ?>
 <br><br>
-<a href="index.html">Go back</a>
+<a href="signup.html">Go back</a>
