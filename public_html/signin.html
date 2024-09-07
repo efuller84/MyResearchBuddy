@@ -5,6 +5,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simple PHP MySQL Website</title>
+    <script>
+        function showAlert(message) {
+            if (message !== "") {
+                alert(message);
+            }
+        }
+    </script>
 </head>
 <body>
     <h2>Sign In</h2>
@@ -17,5 +24,11 @@
         <br><br>
         <input type="submit" value="Sign Up">
     </form>
+
+    <script>
+        // Pass the PHP error message to JavaScript
+        var errorMessage = "<?php echo $error; ?>";
+        showAlert(errorMessage);
+    </script>
 </body>
 </html>
