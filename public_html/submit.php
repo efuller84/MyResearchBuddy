@@ -20,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $password = trim($_POST['password']);
 
         // Check if both fields are not empty
-        if (!empty($username) && !empty($password)) {
+        if (!empty($username) && !empty($password) && isset($_POST['userType'])) {
             $stmt = $conn->prepare("SELECT password FROM users WHERE username = ?");
             $stmt->bind_param("s", $username); // "s" means the parameter is a string
             $stmt->execute();
