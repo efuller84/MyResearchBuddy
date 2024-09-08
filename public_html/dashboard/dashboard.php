@@ -47,7 +47,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 line-height: 1.5;
             }
 
-            /* Button in the user info box (same style as submit button) */
+            /* Smaller button with different color */
+            .user-info-box .small-btn {
+                background-color: #007bff; /* Different color (blue) */
+                color: white;
+                padding: 8px;
+                border: none;
+                border-radius: 5px;
+                width: 80%; /* Smaller width */
+                cursor: pointer;
+                font-size: 12px; /* Smaller font size */
+                font-weight: bold;
+                margin-bottom: 10px; /* Space below this button */
+                transition: background-color 0.3s ease;
+            }
+
+            .user-info-box .small-btn:hover {
+                background-color: #0056b3; /* Darker blue on hover */
+            }
+
+            /* Sign out button with original style */
             .user-info-box .sign-out-btn {
                 background-color: #5cb85c;
                 color: white;
@@ -59,12 +78,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 font-size: 14px;
                 font-weight: bold;
                 transition: background-color 0.3s ease;
-                margin-top: 10px; /* Space between text and button */
             }
 
             .user-info-box .sign-out-btn:hover {
                 background-color: #4cae4c;
             }
+
         </style>
     </head>
     <body>
@@ -72,6 +91,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <p>Hello, <strong><?php echo htmlspecialchars($username); ?></strong></p>
         <p>Your user type is: <strong><?php echo htmlspecialchars($usertype); ?></strong></p>
         <form action="" method="post">
+            <br>
+            <center><button class="small-btn" onclick="">Edit Profile</button></center>
             <button type="submit" class="sign-out-btn">Sign Out</button>
         </form>
     </div>
