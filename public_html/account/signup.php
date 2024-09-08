@@ -52,6 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         $_SESSION['name'] = $name;
                         $_SESSION['email'] = $email;
                         $_SESSION['password'] = $password;
+                        $_SESSION['tags'] = $tags;
                         header("Location: ../dashboard/home.php");
                         exit();
                     } else {
@@ -236,7 +237,7 @@ $conn->close();
             grid-template-columns: repeat(2, 1fr); /* Adjust as needed */
             gap: 10px;
         }
-        
+
     </style>
 </head>
 <body>

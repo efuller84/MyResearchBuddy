@@ -32,6 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 if ($stmt->num_rows > 0) {
                     // Bind result to a variable
                     $stmt->bind_result($userpass, $userid, $useremail, $tags);
+                    $tags = explode(',', $tags);
                 }
             } else {
                 $stmt = $conn->prepare("SELECT p_password, p_name, p_email FROM professors WHERE p_username = ?");
