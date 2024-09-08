@@ -39,7 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 width: 100%;
                 background-color: #007bff; /* Top bar background color */
                 color: white;
-                padding: 15px 20px;
+                padding: 10px 20px;
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
@@ -48,6 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
 
             .top-bar .left {
+                display: flex;
                 font-size: 18px;
                 font-weight: bold;
             }
@@ -139,10 +140,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <body>
         <div class="top-bar">
             <div class="left">
-                <img src="../../MyResearchBuddy.png" height = "150" width = "150">
+                <img src="../../MyResearchBuddy.png" height="150" width="150" alt="My Research Buddy Logo">
             </div>
             <div class="center">
-                Home
+                My Research Buddy <i><div style="font-size: 10px; text-align: right">v1.0 Alpha</div></i>
             </div>
             <div class ="right">
                 <div class="user-info-box">
