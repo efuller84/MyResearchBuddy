@@ -48,7 +48,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     if ($stmt->execute()) {
                         // Set session variables and redirect to dashboard
                         $_SESSION['username'] = $username;
-                        $_SESSION['userType'] = $userType;
+                        $_SESSION['usertype'] = "Student";
+                        $_SESSION['name'] = $name;
                         header("Location: ../dashboard/home.php");
                         exit();
                     } else {
@@ -72,7 +73,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     if ($stmt->execute()) {
                         // Set session variables and redirect to dashboard
                         $_SESSION['username'] = $username;
-                        $_SESSION['userType'] = $userType;
+                        $_SESSION['usertype'] = "Professor";
+                        $_SESSION['name'] = $name;
                         header("Location: ../dashboard/home.php");
                         exit();
                     } else {
