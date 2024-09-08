@@ -12,6 +12,7 @@ CREATE TABLE Students (
     transcript_link VARCHAR(255),
     tags VARCHAR(255),
     field_of_research VARCHAR(255) -- comma-separated list of tag ids
+    project_list VARCHAR(255), -- comma-seperated list of project ids
 );
 
 -- Create Tags Table
@@ -35,8 +36,8 @@ CREATE TABLE Professors (
     p_name VARCHAR(255) NOT NULL,
     p_password VARCHAR(255) NOT NULL,
     p_email VARCHAR(100) NOT NULL UNIQUE,
-    current_projects TEXT,
-    old_projects TEXT
+    current_projects VARCHAR(255),
+    archived_projects VARCHAR(255)
 );
 
 -- Create Projects Table
@@ -45,8 +46,10 @@ CREATE TABLE Projects (
     professor_id INT,
     project_name VARCHAR(100) NOT NULL,
     project_type VARCHAR(50),
-    prerequisites VARCHAR(255),
+    project_description TEXT,
     tags VARCHAR(255), -- comma-separated list of tag ids
     capacity_current INT DEFAULT 0,
-    capacity_total INT
+    capacity_total INT,
+    is_archived TINYINT(1) DEFAULT 0 -- New column to track if a project is archived
 );
+
