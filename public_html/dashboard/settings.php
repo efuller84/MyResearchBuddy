@@ -280,10 +280,10 @@ $conn->close();
                 // Show content based on the user type
                 if ($_SESSION['usertype'] == 'Student') {
                     // Content for students
+                    $tags = $_SESSION['tags'];
                     echo '<div class="dropdown" id="tagsDropdown"">';
                         echo '<div class="dropdown-content" id="tagsContent">';
                             echo '<div class="checkbox-grid">';
-
                                 echo '<label><input type="checkbox" name="tags[]" value="1"';
                                     if (in_array("1", $tags)) {
                                         echo ' checked';
