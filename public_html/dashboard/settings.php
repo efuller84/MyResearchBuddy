@@ -19,6 +19,7 @@ $usertype = $_SESSION['usertype'];
 $name = $_SESSION['name'];
 $email = $_SESSION['email'];
 $password = $_SESSION['password'];
+$tags = $_SESSION['tags'];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Collect form data
@@ -31,13 +32,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $password = trim($_POST['password']); 
     
         if ($usertype == "Student") {
-            $stmt = $conn->prepare("UPDATE students SET s_name = ?, s_email = ?, s_password = ? WHERE s_username = ?");
+            $tags = trim($_POST['tags']);
+            $stmt = $conn->prepare("UPDATE students SET s_name = ?, s_email = ?, s_password = ?, tags = ?, WHERE s_username = ?");
+            $stmt->bind_param('sssss', $name, $email, $password, $tags, $username);
         } else {
             $stmt = $conn->prepare("UPDATE professors SET p_name = ?, p_email = ?, p_password = ? WHERE p_username = ?"); 
+            $stmt->bind_param('ssss', $name, $email, $password, $username);
         }
     
         // Bind the form data to the query
-        $stmt->bind_param('ssss', $name, $email, $password, $username);
     
         // Execute the query
         $stmt->execute();
@@ -195,6 +198,44 @@ $conn->close();
         .delete-btn:hover {
             background-color: #c9302c; /* Darker red on hover */
         }
+
+        .dropdown {
+            margin-top: 20px;
+        }
+
+        .dropdown button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .dropdown button:hover {
+            background-color: #0056b3;
+        }
+
+        .dropdown-content {
+            background-color: #f9f9f9;
+            padding: 10px;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            margin-top: 1px;
+            margin-bottom: 10px;
+        }
+
+        .dropdown-content label {
+            margin-bottom: 10px;
+        }
+
+        .checkbox-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* Adjust as needed */
+            gap: 10px;
+        }
     </style>
 </head>
 <body>
@@ -212,6 +253,7 @@ $conn->close();
                 document.getElementById('edit-form').submit(); // Submit the form
             }
         }
+
     </script>
     <div class="container">
         <h2>Edit Account Settings</h2>
@@ -231,6 +273,26 @@ $conn->close();
 
             <label for="password">Password</label>
             <input type="password" id="password" name="password" value="<?php echo htmlspecialchars($_SESSION['password']); ?>" required>
+
+            <?php
+                // Show content based on the user type
+                if ($_SESSION['usertype'] == 'Student') {
+                    // Content for students
+                    echo '<div class="dropdown" id="tagsDropdown"">';
+                        echo '<div class="dropdown-content" id="tagsContent">';
+                            echo '<div class="checkbox-grid">';
+                                echo '<label><input type="checkbox" name="tags[]" value="1"> AI</label>';
+                                echo '<label><input type="checkbox" name="tags[]" value="2"> Machine Learning</label>';
+                                echo '<label><input type="checkbox" name="tags[]" value="3"> Data Science</label>';
+                                echo '<label><input type="checkbox" name="tags[]" value="4"> Robotics</label>';
+                                echo '<label><input type="checkbox" name="tags[]" value="5"> Quantum Computing</label>';
+                            echo '</div>';
+                        echo '</div>';
+                    echo '</div>';
+                }
+            ?>
+
+
 
             <input type="hidden" id="action_type" name="action_type" value="edit">
 
