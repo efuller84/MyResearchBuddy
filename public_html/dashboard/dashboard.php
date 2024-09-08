@@ -69,7 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </head>
     <body>
     <div class="user-info-box">
-        <p>Hello, <strong><?php echo htmlspecialchars($username); ?></strong>!</p>
+        <p>Hello, <strong><?php echo htmlspecialchars($username); ?></strong></p>
         <p>Your user type is: <strong><?php echo htmlspecialchars($usertype); ?></strong></p>
         <form action="" method="post">
             <button type="submit" class="sign-out-btn">Sign Out</button>
