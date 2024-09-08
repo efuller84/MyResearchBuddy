@@ -58,9 +58,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
 
             .top-bar .center {
-                font-size: 40px; /* Larger font size */
+                font-size: 30px; /* Larger font size */
                 font-weight: bold;
-                letter-spacing: 20px; /* Optional for letter spacing */
+                letter-spacing: 0px; /* Optional for letter spacing */
                 margin-left: 10px; /* Extra margin to keep consistent spacing */
             }
 
@@ -142,7 +142,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <img src="../../MyResearchBuddy.png" height = "150" width = "150">
             </div>
             <div class="center">
-                Dashboard
+                Home
             </div>
             <div class ="right">
                 <div class="user-info-box">

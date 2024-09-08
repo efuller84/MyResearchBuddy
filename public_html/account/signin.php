@@ -45,7 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         $_SESSION['username'] = $username;
                         $_SESSION['usertype'] = $usertype;
                         $_SESSION['name'] = $userid;
-                        header("Location: ../dashboard/dashboard.php");
+                        header("Location: ../dashboard/home.php");
                         exit();
             
                     } else {

@@ -50,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         // Set session variables and redirect to dashboard
                         $_SESSION['username'] = $username;
                         $_SESSION['userType'] = $userType;
-                        header("Location: ../dashboard/dashboard.php");
+                        header("Location: ../dashboard/home.php");
                         exit();
                     } else {
                         $error = "Error signing up as a student. Please try again.";
@@ -74,7 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         // Set session variables and redirect to dashboard
                         $_SESSION['username'] = $username;
                         $_SESSION['userType'] = $userType;
-                        header("Location: ../dashboard/dashboard.php");
+                        header("Location: ../dashboard/home.php");
                         exit();
                     } else {
                         $error = "Error signing up as a professor. Please try again.";
