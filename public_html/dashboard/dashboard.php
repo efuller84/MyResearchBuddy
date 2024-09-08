@@ -90,9 +90,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="user-info-box">
         <p>Hello, <strong><?php echo htmlspecialchars($username); ?></strong></p>
         <p>Your user type is: <strong><?php echo htmlspecialchars($usertype); ?></strong></p>
+        <br>
+        <center><button class="small-btn" onclick="window.location.href='editprofile.php';">Edit Profile</button></center>
         <form action="" method="post">
-            <br>
-            <center><button class="small-btn" onclick="">Edit Profile</button></center>
             <button type="submit" class="sign-out-btn">Sign Out</button>
         </form>
     </div>
