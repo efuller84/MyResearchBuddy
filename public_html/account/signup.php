@@ -88,8 +88,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($error)) {
         echo "<p style='color: red;'>$error</p>";
     }
-} else {
-    echo "Invalid request method.";
 }
 
 $conn->close();
