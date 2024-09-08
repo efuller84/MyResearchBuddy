@@ -19,12 +19,39 @@ $usertype = $_SESSION['usertype'];
 $name = $_SESSION['name'];
 $email = $_SESSION['email'];
 
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Collect form data
+    $name = trim($_POST['name']);
+    $username = trim($_POST['username']);
+    $email = trim($_POST['email']);
+    $password = password_hash(trim($_POST['password']), PASSWORD_DEFAULT); // Hash the password for security
 
-if (!empty($error)) {
-    echo "<script type='text/javascript'>
-        alert('" . addslashes($error) . "');
-        window.location.href = 'signin.php';
-    </script>";
+    if ($usertype == "Student") {
+        $sql = "UPDATE students SET username = :username, email = :email, password = :password WHERE id = :userId";
+    } else {
+        
+    }
+    // SQL query to update user info
+    
+    // Prepare the SQL statement
+    $stmt = $conn->prepare($sql);
+
+    // Bind the form data to the query
+    $stmt->bindParam(':username', $username);
+    $stmt->bindParam(':email', $email);
+    $stmt->bindParam(':password', $password);
+    $stmt->bindParam(':userId', $userId);
+
+    // Execute the query
+    $stmt->execute();
+
+    // Redirect to a success page
+    header("Location: home.php");
+    exit();
+
+
+    // Close the connection
+    $conn = null;
 }
 
 $conn->close();
@@ -35,7 +62,7 @@ $conn->close();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Profile</title>
+    <title>Edit Account Settings</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -144,17 +171,23 @@ $conn->close();
         }
     </script>
     <div class="container">
-        <h2>Edit Profile</h2>
+        <h2>Edit Account Settings</h2>
         
-        <form action="something.php" method="post" onsubmit="confirmButton(event)">
-            <label for="username">Username</label>
-            <input type="text" id="username" name="username" value="<?php echo htmlspecialchars($_SESSION['username']); ?>" required>
+        <center> Username: 
+        <?php
+        echo htmlspecialchars($_SESSION['username']);
+        ?>
+        </center>
+        <br>
+        <form action="" method="post" onsubmit="confirmButton(event)">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" value="<?php echo htmlspecialchars($_SESSION['name']); ?>" required>
 
             <label for="email">Email</label>
             <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($_SESSION['email']); ?>" required>
 
             <label for="password">Password</label>
-            <input type="password" id="password" name="password" placeholder="Enter your new password" required>
+            <input type="password" id="password" name="password" value="<?php echo htmlspecialchars($_SESSION['email']); ?>" required>
 
             <!-- Confirm Button -->
             <button type="submit" class="submit-btn">Apply changes</button>

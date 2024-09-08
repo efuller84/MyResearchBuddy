@@ -51,6 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         $_SESSION['usertype'] = "Student";
                         $_SESSION['name'] = $name;
                         $_SESSION['email'] = $email;
+                        $_SESSION['password'] = $password;
                         header("Location: ../dashboard/home.php");
                         exit();
                     } else {

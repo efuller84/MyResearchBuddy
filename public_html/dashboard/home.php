@@ -4,6 +4,7 @@ session_start();
 $username = $_SESSION['username'];
 $usertype = $_SESSION['usertype'];
 $name = $_SESSION['name'];
+$useremail = $_SESSION['email']; 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Unset all session variables
@@ -143,14 +144,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <img src="../../MyResearchBuddy.png" height="150" width="150" alt="My Research Buddy Logo">
             </div>
             <div class="center">
-                My Research Buddy <i><div style="font-size: 10px; text-align: right">v0.1h - Hackathon Edition</div></i>
+                My Research Buddy <i><div style="font-size: 10px; text-align: right">v1.0h - Hackathon Edition</div></i>
             </div>
             <div class ="right">
                 <div class="user-info-box">
                     <p><center><strong><?php echo htmlspecialchars($name); ?></strong><center></p>
                     <p><center><strong><?php echo htmlspecialchars($usertype); ?></strong><center></p>
                     <br>
-                    <center><button class="small-btn" onclick="window.location.href='editprofile.php';">Edit Profile</button></center>
+                    <center><button class="small-btn" onclick="window.location.href='editprofile.php';">Edit Account Settings</button></center>
                     <form action="" method="post">
                         <button type="submit" class="sign-out-btn">Sign Out</button>
                     </form>
