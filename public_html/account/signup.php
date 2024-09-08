@@ -14,8 +14,10 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+$error = ""; // Initialize error message variable
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Check if username, password, email, and userType are set
+    // Check if all necessary fields are set
     if (isset($_POST['username'], $_POST['password'], $_POST['userType'], $_POST['email'], $_POST['name'])) {
         $username = trim($_POST['username']);
         $password = trim($_POST['password']);
@@ -25,9 +27,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $name = trim($_POST['name']);
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-        // Ensure that none of the fields are empty
+        // Ensure fields are not empty and passwords match
         if (!empty($username) && !empty($password) && !empty($userType) && !empty($email) && $password === $rePassword) {
-            
+
             if ($userType == "student") {
                 // Handle student signup
                 $stmt = $conn->prepare("SELECT student_id FROM Students WHERE s_username = ?");
@@ -45,12 +47,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $stmt->bind_param("sssss", $username, $name, $hashed_password, $email, $tags_str);
 
                     if ($stmt->execute()) {
+                        // Set session variables and redirect to dashboard
                         $_SESSION['username'] = $username;
-                        $_SESSION['userType'] = $usertype;
+                        $_SESSION['userType'] = $userType;
                         header("Location: ../dashboard/dashboard.php");
                         exit();
                     } else {
-                        $error = "Error signing up as student. Please try again.";
+                        $error = "Error signing up as a student. Please try again.";
                     }
                 }
                 $stmt->close();
@@ -68,9 +71,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $stmt->bind_param("ssss", $username, $name, $hashed_password, $email);
 
                     if ($stmt->execute()) {
-                        echo "Professor sign-up successful!";
+                        // Set session variables and redirect to dashboard
+                        $_SESSION['username'] = $username;
+                        $_SESSION['userType'] = $userType;
+                        header("Location: ../dashboard/dashboard.php");
+                        exit();
                     } else {
-                        $error = "Error signing up as professor. Please try again.";
+                        $error = "Error signing up as a professor. Please try again.";
                     }
                 }
                 $stmt->close();
@@ -82,14 +89,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $error = "All fields (Username, Password, Email, Name, and User Type) are required, and passwords must match.";
         }
     } else {
-        $error = "Username, Password, Email, Name, and User Type fields are required.";
-    }
-
-    if (isset($error)) {
-        echo "<p style='color: red;'>$error</p>";
+        $error = "All required fields must be filled out.";
     }
 }
 
+// Close the connection
 $conn->close();
 ?>
 
@@ -97,104 +101,191 @@ $conn->close();
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up</title>
 
     <style>
-    .submit-btn {
-        margin-top: 60px; /* Adds space above the Sign Up button */
-    }
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            height: 100vh;
+            margin: 0;
+            padding-top: 50px;
+        }
 
-    /* Other CSS remains the same */
-    .dropdown {
-        position: relative;
-        display: inline-block;
-    }
+        .container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+        }
 
-    .dropdown-content {
-        display: none;
-        position: absolute;
-        background-color: #f9f9f9;
-        min-width: 300px;
-        padding: 10px;
-        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-        z-index: 1;
-    }
+        h2 {
+            text-align: center;
+            font-family: 'Arial', sans-serif;
+            color: #333;
+        }
 
-    .dropdown:hover .dropdown-content {
-        display: block;
-    }
+        .error {
+            color: red;
+            text-align: center;
+            margin-bottom: 20px;
+        }
 
-    .dropdown-content label {
-        display: block;
-        margin-bottom: 5px;
-    }
+        label {
+            font-size: 14px;
+            color: #333;
+            display: block;
+            margin-bottom: 5px;
+        }
 
-    .checkbox-grid {
-        display: grid;
-        grid-template-columns: repeat(5, 1fr); 
-        gap: 10px;
-    }
-</style>
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            color: #555;
+        }
 
+        .radio-group {
+            margin-bottom: 20px;
+        }
 
+        .radio-group input[type="radio"] {
+            margin-right: 10px;
+        }
 
+        .submit-btn {
+            background-color: #5cb85c;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            width: 100%;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background-color: #4cae4c;
+        }
+
+        .form-footer {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .form-footer a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .form-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .dropdown {
+            margin-top: 20px;
+        }
+
+        .dropdown button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .dropdown button:hover {
+            background-color: #0056b3;
+        }
+
+        .dropdown-content {
+            display: none;
+            background-color: #f9f9f9;
+            padding: 10px;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        .dropdown-content label {
+            margin-bottom: 10px;
+        }
+
+        .checkbox-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* Adjust as needed */
+            gap: 10px;
+        }
+    </style>
 </head>
 <body>
-    <h2>Sign Up</h2>
-    <form action="" method="post" onsubmit="return validateForm()">
-        <label for="username">Username:</label>
-        <input type="text" name="username" id="username" required>
-        <br><br>
+    <div class="container">
+        <h2>Sign Up</h2>
 
-        <label for="name">Full Name:</label>
-        <input type="text" name="name" id="name" required>
-        <br><br>
+        <!-- Display error messages inside the form -->
+        <?php if (!empty($error)): ?>
+            <p class="error"><?php echo $error; ?></p>
+        <?php endif; ?>
 
-        <label for="email">Email:</label>
-        <input type="email" name="email" id="email" required>
-        <br><br>
+        <form action="" method="post" onsubmit="return validateForm()">
+            <label for="username">Username:</label>
+            <input type="text" name="username" id="username" required>
 
-        <label for="password">Password:</label>
-        <input type="password" name="password" id="password" required>
-        <br><br>
+            <label for="name">Full Name:</label>
+            <input type="text" name="name" id="name" required>
 
-        <label for="rePassword">Re-enter Password:</label>
-        <input type="password" name="rePassword" id="rePassword" required>
-        <br><br>
+            <label for="email">Email:</label>
+            <input type="email" name="email" id="email" required>
 
-       <!-- Buttons to select whether the user is a Student or Professor -->
-        <label>Are you a:</label>
-        <br><br>
-        <input type="radio" id="student" name="userType" value="student" onclick="toggleTagsDropdown()">
-        <label for="student">Student</label>
+            <label for="password">Password:</label>
+            <input type="password" name="password" id="password" required>
 
-        <br><br>
+            <label for="rePassword">Re-enter Password:</label>
+            <input type="password" name="rePassword" id="rePassword" required>
 
-        <input type="radio" id="professor" name="userType" value="professor" onclick="toggleTagsDropdown()">
-        <label for="professor">Professor</label>
+           <!-- Buttons to select whether the user is a Student or Professor -->
+            <div class="radio-group">
+                <label for="student"><input type="radio" id="student" name="userType" value="student" onclick="toggleTagsDropdown()"> Student</label>
+                <label for="professor"><input type="radio" id="professor" name="userType" value="professor" onclick="toggleTagsDropdown()"> Professor</label>
+            </div>
 
-    <br><br>
-
-        <!-- Tags dropdown for students (initially hidden) -->
-        <div class="dropdown" id="tagsDropdown" style="display:none;">
-            <button>Select Items</button>
-            <div class="dropdown-content">
-                <div class="checkbox-grid">
-                    <label><input type="checkbox" name="tags[]" value="1"> AI</label>
-                    <label><input type="checkbox" name="tags[]" value="2"> Machine Learning</label>
-                    <label><input type="checkbox" name="tags[]" value="3"> Data Science</label>
-                    <label><input type="checkbox" name="tags[]" value="4"> Robotics</label>
-                    <label><input type="checkbox" name="tags[]" value="5"> Quantum Computing</label>
-                    <!-- Add more tags as necessary -->
+            <!-- Tags dropdown for students (initially hidden) -->
+            <div class="dropdown" id="tagsDropdown" style="display:none;">
+                <button type="button" onclick="toggleTags()">Select Tags</button>
+                <div class="dropdown-content" id="tagsContent">
+                    <div class="checkbox-grid">
+                        <label><input type="checkbox" name="tags[]" value="1"> AI</label>
+                        <label><input type="checkbox" name="tags[]" value="2"> Machine Learning</label>
+                        <label><input type="checkbox" name="tags[]" value="3"> Data Science</label>
+                        <label><input type="checkbox" name="tags[]" value="4"> Robotics</label>
+                        <label><input type="checkbox" name="tags[]" value="5"> Quantum Computing</label>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <br><br>
-        <input type="submit" value="Sign Up">
-    </form>
+            <br>
+            <input type="submit" value="Sign Up" class="submit-btn">
+        </form>
+
+        <div class="form-footer">
+            <p>If you have an account, please <a href="signin.php">sign in</a>.</p>
+        </div>
+    </div>
 
     <script>
     // Show/Hide the tags dropdown based on the selected user type
@@ -208,22 +299,28 @@ $conn->close();
             tagsDropdown.style.display = 'none'; // Hide the tags dropdown for professors
         }
     }
-    </script>
-    <script>
-        // Validate the form to check if passwords match
-        function validateForm() {
-            var password = document.getElementById('password').value;
-            var rePassword = document.getElementById('rePassword').value;
 
-            if (password !== rePassword) {
-                alert("Passwords do not match!");
-                return false; // Prevent form submission
-            }
-            return true;
+    // Toggle visibility of the tags content
+    function toggleTags() {
+        var content = document.getElementById('tagsContent');
+        if (content.style.display === "none" || content.style.display === "") {
+            content.style.display = "block";
+        } else {
+            content.style.display = "none";
         }
-    </script>
+    }
 
-    <br>
-    <p>If you have an account, please <a href="signin.php">sign in</a>.</p>
+    // Validate the form to check if passwords match
+    function validateForm() {
+        var password = document.getElementById('password').value;
+        var rePassword = document.getElementById('rePassword').value;
+
+        if (password !== rePassword) {
+            alert("Passwords do not match!");
+            return false; // Prevent form submission
+        }
+        return true;
+    }
+    </script>
 </body>
 </html>
