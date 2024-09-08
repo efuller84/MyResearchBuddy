@@ -364,11 +364,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['search_text'])) {
             background-color: #4cae4c;
         }
 
-        /* Padding for main content below the top bar */
-        .main-content {
-            padding-top: 80px; /* Adjust to leave space for the fixed top bar */
-        }
-
     </style>
 </head>
 <body>
