@@ -52,15 +52,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 font-weight: bold;
             }
 
+            .top-bar .left img {
+                height: 150px; /* Adjust size of the image */
+                margin-right: 10px; /* Space between image and Dashboard text */
+            }
+
             .top-bar .center {
-                font-size: 18px;
+                font-size: 40px; /* Larger font size */
                 font-weight: bold;
+                letter-spacing: 1px; /* Optional for letter spacing */
+                margin-left: 10px; /* Extra margin to keep consistent spacing */
             }
 
             .top-bar .right {
                 position: relative;
                 top: 0;
             }
+
 
             /* Container for user info box */
             .user-info-box {
@@ -71,6 +79,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 font-family: 'Arial', sans-serif;
                 color: #333;
                 font-size: 14px;
+                margin-right: 40px;
             }
 
             .user-info-box strong {
@@ -130,15 +139,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <body>
         <div class="top-bar">
             <div class="left">
-                Website Title
+                <img src="../../MyResearchBuddy.png" height = "150" width = "150">
             </div>
             <div class="center">
                 Dashboard
             </div>
             <div class ="right">
                 <div class="user-info-box">
-                    <p>Hello, <strong><?php echo htmlspecialchars($name); ?></strong></p>
-                    <p>Your user type is: <strong><?php echo htmlspecialchars($usertype); ?></strong></p>
+                    <p><center><strong><?php echo htmlspecialchars($name); ?></strong><center></p>
+                    <p><center><strong><?php echo htmlspecialchars($usertype); ?></strong><center></p>
                     <br>
                     <center><button class="small-btn" onclick="window.location.href='editprofile.php';">Edit Profile</button></center>
                     <form action="" method="post">
