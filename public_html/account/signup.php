@@ -42,8 +42,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $tags = isset($_POST['tags']) ? $_POST['tags'] : [];
                     $tags_str = implode(",", $tags); // Convert selected tag IDs to a comma-separated string
 
-                    $stmt = $conn->prepare("INSERT INTO Students (s_username, s_name, s_password, s_email, field_of_research) VALUES (?, ?, ?, ?, ?)");
-                    $stmt->bind_param("sssss", $username, $name, $password, $email, $tags_str);
+                    $stmt = $conn->prepare("INSERT INTO Students (s_username, s_name, s_password, s_email, field_of_research, tags) VALUES (?, ?, ?, ?, ?, ?)");
+                    $stmt->bind_param("sssss", $username, $name, $password, $email, $tags_str, $tags_str);
 
                     if ($stmt->execute()) {
                         // Set session variables and redirect to dashboard
