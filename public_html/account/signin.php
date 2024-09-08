@@ -37,46 +37,41 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 // Check if the user exists
                 if ($stmt->num_rows > 0) {
                     // Bind result to a variable
-                    $stmt->bind_result($hashed_password);
+                    $stmt->bind_result($userpass);
                     $stmt->fetch();
     
-                    // Verify the password (assuming passwords are hashed)
-                    if (password_verify($password, $hashed_password)) {
+                    // Verify the password
+                    if ($userpass == $password) {
                         $_SESSION['username'] = $username;
                         $_SESSION['usertype'] = $usertype;
                         header("Location: ../dashboard/dashboard.php");
                         exit();
             
                     } else {
-                        $error = "Invalid password.";
-                        exit();
+                        $error = "Invalid password!";
             
                     }
                 } else {
-                    $error = "Invalid username.";
-                    //header("Location: ../dashboard/dashboard.php");
-                    exit();
+                    $error = "Invalid username!";
                 }
             }
             $stmt->close();       
         } else if(empty($username)){
             $error = "Invalid username!";
-            //header("Location: ../dashboard/dashboard.php");
 
         } else if(empty($password)){
             $error = "Invalid password!";
-            //header("Location: ../dashboard/dashboard.php");
+            
 
         } else if(empty($usertype)){
             $error = "Invalid user type!";
-            //header("Location: ../dashboard/dashboard.php");
         }
     }
 
 if (!empty($error)) {
     echo "<script type='text/javascript'>
         alert('" . addslashes($error) . "');
-        window.location.href = 'signin.php?error=" . urlencode($error) . "';
+        window.location.href = 'signin.php';
     </script>";
 }
 
