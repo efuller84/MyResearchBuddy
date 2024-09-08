@@ -258,7 +258,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['search_text'])) {
 <body>
     <div class="top-bar">
         <div class="left">
-            <img src="../../MyResearchBuddy.png" height="150" width="150" alt="My Research Buddy Logo">
+            <img src="../MyResearchBuddy.png" height="150" width="150" alt="My Research Buddy Logo">
         </div>
         <div class="center">
             My Research Buddy <i><div style="font-size: 10px; text-align: right">v1.0h - Hackathon Edition</div></i>
