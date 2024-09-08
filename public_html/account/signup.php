@@ -50,6 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         $_SESSION['username'] = $username;
                         $_SESSION['usertype'] = "Student";
                         $_SESSION['name'] = $name;
+                        $_SESSION['email'] = $email;
                         header("Location: ../dashboard/home.php");
                         exit();
                     } else {
@@ -75,6 +76,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         $_SESSION['username'] = $username;
                         $_SESSION['usertype'] = "Professor";
                         $_SESSION['name'] = $name;
+                        $_SESSION['email'] = $email;
                         header("Location: ../dashboard/home.php");
                         exit();
                     } else {
