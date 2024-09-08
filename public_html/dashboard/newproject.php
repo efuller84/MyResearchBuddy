@@ -1,20 +1,14 @@
 <?php
-// Connect to the database
-$servername = "localhost";
-$username = "root"; // Adjust this to match your database credentials
-$password = "";
-$dbname = "my_database";
+session_start();
 
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+$username = $_SESSION['username'];
+$usertype = $_SESSION['usertype'];
+$name = $_SESSION['name'];
+$useremail = $_SESSION['email']; 
+$password = $_SESSION['password'];
 
 // Check if form was submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $professor_id = $_POST['professor_id'];  // Assuming professor is logged in and we have the ID
     $project_name = $_POST['project_name'];
     $project_location = $_POST['project_location'];
     $project_description = $_POST['project_description'];
@@ -40,12 +34,42 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <html>
 <head>
     <title>Create New Project</title>
+    <style>
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 300px;
+            padding: 10px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown-content label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        /* CSS Grid for 5 columns */
+        .checkbox-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+        }
+    </style>
 </head>
 <body>
     <h2>Create a New Project</h2>
     <form method="POST" action="">
-        <label for="professor_id">Professor ID:</label><br>
-        <input type="number" id="professor_id" name="professor_id" required><br>
 
         <label for="project_name">Project Name:</label><br>
         <input type="text" id="project_name" name="project_name" required><br>
@@ -59,11 +83,40 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <label for="tags">Tags (comma-separated tag IDs):</label><br>
         <input type="text" id="tags" name="tags"><br>
 
+
+        <div class="dropdown">
+        <button>Select Items</button>
+        <div class="dropdown-content">
+            <div class="checkbox-grid">
+                <label><input type="checkbox" name="items" value="item1"> Item 1</label>
+                <label><input type="checkbox" name="items" value="item2"> Item 2</label>
+                <label><input type="checkbox" name="items" value="item3"> Item 3</label>
+                <label><input type="checkbox" name="items" value="item4"> Item 4</label>
+                <label><input type="checkbox" name="items" value="item5"> Item 5</label>
+                <label><input type="checkbox" name="items" value="item6"> Item 6</label>
+                <label><input type="checkbox" name="items" value="item7"> Item 7</label>
+                <label><input type="checkbox" name="items" value="item8"> Item 8</label>
+                <label><input type="checkbox" name="items" value="item9"> Item 9</label>
+                <label><input type="checkbox" name="items" value="item10"> Item 10</label>
+                <label><input type="checkbox" name="items" value="item11"> Item 11</label>
+                <label><input type="checkbox" name="items" value="item12"> Item 12</label>
+                <label><input type="checkbox" name="items" value="item13"> Item 13</label>
+                <label><input type="checkbox" name="items" value="item14"> Item 14</label>
+                <label><input type="checkbox" name="items" value="item15"> Item 15</label>
+                <!-- Add more items as needed -->
+            </div>
+        </div>
+    </div>
+
+
+        <label>Project Status:</label><br>
+        <input type="radio" id="current" name="project_status" value="current">
+        <label for="current">Current</label><br>
+        <input type="radio" id="archive" name="project_status" value="archive">
+        <label for="archive">Archive</label><br>
+
         <label for="capacity_total">Total Capacity:</label><br>
         <input type="number" id="capacity_total" name="capacity_total" required><br>
-
-        <label for="is_archived">Archive this project:</label>
-        <input type="checkbox" id="is_archived" name="is_archived"><br>
 
         <input type="submit" value="Create Project">
     </form>
