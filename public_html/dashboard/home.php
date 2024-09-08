@@ -20,24 +20,10 @@ $username = $_SESSION['username'];
 $usertype = $_SESSION['usertype'];  // 'Student' or 'Professor'
 $name = $_SESSION['name'];
 $useremail = $_SESSION['email'];
-$password = $_SESSION['password'];
-$tags = $_SESSION['tags'];
-// Fetch professor_id dynamically from the database based on the username
-if ($usertype == 'Professor') {
-    $professor_query = "SELECT professor_id FROM Professors WHERE p_username = '$username'";
-    $professor_result = mysqli_query($conn, $professor_query);
-
-    if ($professor_result && mysqli_num_rows($professor_result) > 0) {
-        $professor_data = mysqli_fetch_assoc($professor_result);
-        $professor_id = $professor_data['professor_id'];
-    } else {
-        echo "No professor found with the username.";
-        exit();
-    }
-}
+$tags = $_SESSION['tags'];  // Array of tags selected by user (both professors and students)
 
 // Handle sign-out
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['sign_out'])) {
     // Unset all session variables
     $_SESSION = array();
 
@@ -49,8 +35,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     exit();
 }
 
-// Fetch projects only if the user is a professor
+// Initialize recommended projects array (for students)
+$recommended_projects = [];
+
+// Fetch projects and handle logic based on user type
 if ($usertype == 'Professor') {
+    // Fetch professor_id dynamically from the database based on the username
+    $professor_query = "SELECT professor_id FROM Professors WHERE p_username = '$username'";
+    $professor_result = mysqli_query($conn, $professor_query);
+
+    if ($professor_result && mysqli_num_rows($professor_result) > 0) {
+        $professor_data = mysqli_fetch_assoc($professor_result);
+        $professor_id = $professor_data['professor_id'];
+    } else {
+        echo "No professor found with the username.";
+        exit();
+    }
+
     // Query to get active projects for the professor
     $active_projects_query = "
         SELECT project_id, project_name, project_description, tags 
@@ -64,6 +65,49 @@ if ($usertype == 'Professor') {
         FROM Projects 
         WHERE professor_id = $professor_id AND is_archived = 1";
     $archived_projects_result = mysqli_query($conn, $archived_projects_query);
+
+} elseif ($usertype == 'Student') {
+    // Handle recommendation logic for students
+    if (!empty($tags)) {
+        $tag_string = implode(',', $tags);  // Create a comma-separated string of tag IDs
+
+        // Query for projects that match multiple tags
+        $query_multi_tag = "
+            SELECT project_id, project_name, project_description, tags, project_application_link
+            FROM Projects
+            WHERE FIND_IN_SET($tags[0], tags) > 0";
+
+        for ($i = 1; $i < count($tags); $i++) {
+            $query_multi_tag .= " AND FIND_IN_SET($tags[$i], tags) > 0";
+        }
+
+        $query_multi_tag .= " LIMIT 5";
+        $multi_tag_result = mysqli_query($conn, $query_multi_tag);
+
+        while ($project = mysqli_fetch_assoc($multi_tag_result)) {
+            $recommended_projects[] = $project;
+        }
+
+        // If fewer than 5 projects found, fill with projects that match individual tags
+        if (count($recommended_projects) < 5) {
+            $remaining = 5 - count($recommended_projects);
+            $query_single_tag = "
+                SELECT project_id, project_name, project_description, tags, project_application_link
+                FROM Projects
+                WHERE FIND_IN_SET($tags[0], tags) > 0";
+
+            for ($i = 1; $i < count($tags); $i++) {
+                $query_single_tag .= " OR FIND_IN_SET($tags[$i], tags) > 0";
+            }
+
+            $query_single_tag .= " LIMIT $remaining";
+            $single_tag_result = mysqli_query($conn, $query_single_tag);
+
+            while ($project = mysqli_fetch_assoc($single_tag_result)) {
+                $recommended_projects[] = $project;
+            }
+        }
+    }
 }
 ?>
 
@@ -178,28 +222,27 @@ if ($usertype == 'Professor') {
             background-color: #4cae4c;
         }
 
-       /* Padding for main content below the top bar */
-.main-content {
-    padding-top: 150px; /* Increased from 80px to give more space */
-    padding-left: 20px; /* Optional: Adds a bit of padding to the left */
-}
+        /* Padding for main content below the top bar */
+        .main-content {
+            padding-top: 150px;
+            padding-left: 20px;
+        }
+         /* Create Project (Plus button without tooltip) */
+        .plus-btn {
+         font-size: 40px;
+         width: 50px;
+         height: 50px;
+         border-radius: 50%;
+         background-color: #28a745;
+         color: white;
+         border: none;
+         cursor: pointer;
+         position: relative; /* This can remain */
+        }
 
-   /* Create Project (Plus button without tooltip) */
-.plus-btn {
-    font-size: 40px;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    cursor: pointer;
-    position: relative; /* This can remain */
-}
-
-.plus-btn:hover {
-    background-color: #218838;
-}
+        .plus-btn:hover {
+        background-color: #218838;
+        }
 
         /* Project listing */
         .project-panel {
@@ -224,6 +267,33 @@ if ($usertype == 'Professor') {
             margin-bottom: 40px;
         }
 
+        /* Email and Apply buttons */
+        .action-btn {
+            padding: 10px 20px;
+            margin-right: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .email-btn {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .email-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .apply-btn {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .apply-btn:hover {
+            background-color: #218838;
+        }
+
     </style>
 </head>
 <body>
@@ -241,7 +311,7 @@ if ($usertype == 'Professor') {
                 <br>
                 <center><button class="small-btn" onclick="window.location.href='settings.php';">Edit Account Settings</button></center>
                 <form action="" method="post">
-                    <button type="submit" class="sign-out-btn">Sign Out</button>
+                    <button type="submit" class="sign-out-btn" name="sign_out">Sign Out</button>
                 </form>
             </div>
         </div>
@@ -252,10 +322,9 @@ if ($usertype == 'Professor') {
             <h2>Manage Projects</h2>
             
            <!-- Create Project Button (without tooltip) -->
-<button class="plus-btn" onclick="window.location.href='newproject.php';">
-    + 
-</button>
-
+           <button class="plus-btn" onclick="window.location.href='newproject.php';">
+               + 
+           </button>
 
             <!-- Active Projects Section -->
             <h3>Active Projects</h3>
@@ -279,6 +348,24 @@ if ($usertype == 'Professor') {
                         <p><strong>Tags:</strong> <?php echo htmlspecialchars($project['tags']); ?></p>
                     </div>
                 <?php endwhile; ?>
+            </div>
+
+        <?php elseif ($usertype == 'Student'): ?>
+            <h2>Recommended Projects</h2>
+
+            <!-- Recommended Projects Section -->
+            <div class="project-list">
+                <?php foreach ($recommended_projects as $project): ?>
+                    <div class="project-panel">
+                        <h4><?php echo htmlspecialchars($project['project_name']); ?></h4>
+                        <p><strong>Description:</strong> <?php echo htmlspecialchars($project['project_description']); ?></p>
+                        <p><strong>Tags:</strong> <?php echo htmlspecialchars($project['tags']); ?></p>
+
+                        <!-- Email and Apply buttons -->
+                        <button class="action-btn email-btn" onclick="window.location.href='mailto:professor_email@example.com'">Email</button>
+                        <button class="action-btn apply-btn" onclick="window.location.href='<?php echo htmlspecialchars($project['project_application_link']); ?>'">Apply</button>
+                    </div>
+                <?php endforeach; ?>
             </div>
         <?php endif; ?>
     </div>
