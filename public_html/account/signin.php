@@ -33,6 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     // Bind result to a variable
                     $stmt->bind_result($userpass, $userid, $useremail, $ctags);
                     $tags = explode(',', $ctags);
+                    $_SESSION['tags'] = $tags;
                 }
             } else {
                 $stmt = $conn->prepare("SELECT p_password, p_name, p_email FROM professors WHERE p_username = ?");
