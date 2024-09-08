@@ -1,13 +1,14 @@
 CREATE DATABASE my_database;
 USE my_database;
 
+-- TODO: make usernames special?
 -- Create Students Table
 CREATE TABLE Students (
     student_id INT AUTO_INCREMENT PRIMARY KEY,
-    s_username VARCHAR(50) NOT NULL,
+    s_username VARCHAR(50) NOT NULL UNIQUE,
     s_name VARCHAR(255) NOT NULL,
     s_password VARCHAR(255) NOT NULL,
-    s_email VARCHAR(100) NOT NULL,
+    s_email VARCHAR(100) NOT NULL UNIQUE,
     resume_link VARCHAR(255),
     transcript_link VARCHAR(255),
     tags VARCHAR(255),
@@ -31,10 +32,10 @@ INSERT INTO tags (id, tag_name) VALUES
 -- Create Professors Table
 CREATE TABLE Professors (
     professor_id INT AUTO_INCREMENT PRIMARY KEY,
-    p_username VARCHAR(50) NOT NULL,
+    p_username VARCHAR(50) NOT NULL UNIQUE,
     p_name VARCHAR(255) NOT NULL,
     p_password VARCHAR(255) NOT NULL,
-    p_email VARCHAR(100) NOT NULL,
+    p_email VARCHAR(100) NOT NULL UNIQUE,
     current_projects TEXT,
     old_projects TEXT
 );
