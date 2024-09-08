@@ -60,7 +60,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             .top-bar .center {
                 font-size: 40px; /* Larger font size */
                 font-weight: bold;
-                letter-spacing: 1px; /* Optional for letter spacing */
+                letter-spacing: 20px; /* Optional for letter spacing */
                 margin-left: 10px; /* Extra margin to keep consistent spacing */
             }
 
