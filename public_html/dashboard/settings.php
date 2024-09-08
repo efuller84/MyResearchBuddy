@@ -30,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $name = trim($_POST['name']);
         $email = trim($_POST['email']);
         $password = trim($_POST['password']); 
-    
+        //UPDATE THIS FOR TAG BACK TO IMPLODE
         if ($usertype == "Student") {
             $tags = trim($_POST['tags']);
             $stmt = $conn->prepare("UPDATE students SET s_name = ?, s_email = ?, s_password = ?, tags = ?, WHERE s_username = ?");

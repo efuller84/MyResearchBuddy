@@ -20,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $username = trim($_POST['username']);
         $password = trim($_POST['password']);
         $usertype = trim($_POST['usertype']);
-        $tags = "";
+        $tags = [];
 
         // Check if fields are not empty
         if (!empty($username) && !empty($password)) {
@@ -31,8 +31,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $stmt->store_result();
                 if ($stmt->num_rows > 0) {
                     // Bind result to a variable
-                    $stmt->bind_result($userpass, $userid, $useremail, $tags);
-                    $tags = explode(',', $tags);
+                    $stmt->bind_result($userpass, $userid, $useremail, $ctags);
+                    $tags = explode(',', $ctags);
                 }
             } else {
                 $stmt = $conn->prepare("SELECT p_password, p_name, p_email FROM professors WHERE p_username = ?");
