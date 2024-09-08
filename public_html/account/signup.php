@@ -236,6 +236,7 @@ $conn->close();
             grid-template-columns: repeat(2, 1fr); /* Adjust as needed */
             gap: 10px;
         }
+        
     </style>
 </head>
 <body>

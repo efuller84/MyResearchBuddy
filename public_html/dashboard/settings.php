@@ -22,32 +22,53 @@ $password = $_SESSION['password'];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Collect form data
-    $name = trim($_POST['name']);
-    $email = trim($_POST['email']);
-    $password = trim($_POST['password']); 
 
-    if ($usertype == "Student") {
-        $stmt = $conn->prepare("UPDATE students SET s_name = ?, s_email = ?, s_password = ? WHERE s_username = ?");
-    } else {
-        $stmt = $conn->prepare("UPDATE professors SET p_name = ?, p_email = ?, p_password = ? WHERE p_username = ?"); 
+    $action_type = $_POST['action_type'];
+
+    if ($action_type == 'edit') {
+        $name = trim($_POST['name']);
+        $email = trim($_POST['email']);
+        $password = trim($_POST['password']); 
+    
+        if ($usertype == "Student") {
+            $stmt = $conn->prepare("UPDATE students SET s_name = ?, s_email = ?, s_password = ? WHERE s_username = ?");
+        } else {
+            $stmt = $conn->prepare("UPDATE professors SET p_name = ?, p_email = ?, p_password = ? WHERE p_username = ?"); 
+        }
+    
+        // Bind the form data to the query
+        $stmt->bind_param('ssss', $name, $email, $password, $username);
+    
+        // Execute the query
+        $stmt->execute();
+    
+        $_SESSION['name'] = $name;
+        $_SESSION['email'] = $email;
+        $_SESSION['password'] = $password;
+        // Redirect to a success page
+        header("Location: home.php");
+        exit();
+    
+    
+        // Close the connection
+        $conn = null;
+    } elseif ($action_type == 'delete') {
+        if ($usertype == "Student") {
+            $stmt = $conn->prepare("DELETE FROM students WHERE s_username = ?");
+        } else {
+            $stmt = $conn->prepare("DELETE FROM professors WHERE p_username = ?");
+        }
+
+        // Prepare and execute the deletion query
+        $stmt->bind_param('s', $username);
+        $stmt->execute();
+
+        // Destroy the session and redirect to a goodbye page or home page
+        session_destroy();
+        header("Location: ../account/signin.php"); // Replace with appropriate page
+        exit();
     }
 
-    // Bind the form data to the query
-    $stmt->bind_param('ssss', $name, $email, $password, $username);
-
-    // Execute the query
-    $stmt->execute();
-
-    $_SESSION['name'] = $name;
-    $_SESSION['email'] = $email;
-    $_SESSION['password'] = $password;
-    // Redirect to a success page
-    header("Location: home.php");
-    exit();
-
-
-    // Close the connection
-    $conn = null;
 }
 
 $conn->close();
@@ -155,6 +176,25 @@ $conn->close();
             text-decoration: underline;
         }
 
+        
+        .delete-btn {
+            background-color: #d9534f; /* Red color */
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            width: 100%;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+            margin-bottom: 5px; /* Space between Delete and Go Back buttons */
+        }
+
+        .delete-btn:hover {
+            background-color: #c9302c; /* Darker red on hover */
+        }
     </style>
 </head>
 <body>
@@ -163,6 +203,13 @@ $conn->close();
             var confirmation = window.confirm('Confirm changes?');
             if (!confirmation) {
                 event.preventDefault();
+            }
+        }
+
+        function confirmDelete() {
+            if (confirm("Press OK to delete your account. This action cannot be undone.")) {
+                document.getElementById('action_type').value = 'delete'; // Change the action to delete
+                document.getElementById('edit-form').submit(); // Submit the form
             }
         }
     </script>
@@ -175,7 +222,7 @@ $conn->close();
         ?>
         </center>
         <br>
-        <form action="" method="post" onsubmit="confirmButton(event)">
+        <form id = "edit-form" action="" method="post" onsubmit="confirmButton(event)">
             <label for="name">Name (Max length of 20 characters):</label>
             <input type="text" id="name" name="name" value="<?php echo htmlspecialchars($_SESSION['name']); ?>" required>
 
@@ -185,13 +232,16 @@ $conn->close();
             <label for="password">Password</label>
             <input type="password" id="password" name="password" value="<?php echo htmlspecialchars($_SESSION['password']); ?>" required>
 
+            <input type="hidden" id="action_type" name="action_type" value="edit">
+
             <!-- Confirm Button -->
             <button type="submit" class="submit-btn">Apply changes</button>
 
             <!-- Go Back Button -->
             <button type="button" class="back-btn" onclick="window.history.back()">Never mind</button>
+
+            <button type="button" class="delete-btn" onclick="confirmDelete()">Delete my account (Permanent!!)</button>
         </form>
     </div>
-
 </body>
 </html>
