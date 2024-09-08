@@ -1,4 +1,4 @@
-# United Hacks Project - MyResearchBuddy V 1.0h
+# United Hacks Project - MyResearchBuddy
 
 Have you been interested in research but are scared of cold calling professors? This is the solution for you! Our website will connect you with research positions that match your classes and/or experience on your resume!
 
