@@ -20,54 +20,57 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $username = trim($_POST['username']);
         $password = trim($_POST['password']);
         $usertype = trim($_POST['usertype']);
+        $tags = "";
 
         // Check if fields are not empty
         if (!empty($username) && !empty($password)) {
             if($usertype == "Student") {
-                $stmt = $conn->prepare("SELECT s_password, s_name, s_email FROM students WHERE s_username = ?");
-            } else {
-                $stmt = $conn->prepare("SELECT p_password, p_name, p_email FROM professors WHERE p_username = ?");
-            }
+                $stmt = $conn->prepare("SELECT s_password, s_name, s_email, tags FROM students WHERE s_username = ?");
                 $stmt->bind_param("s", $username); // "s" means the parameter is a string
                 $stmt->execute();
                 $stmt->store_result();
-    
-                // Check if the user exists
+                if ($stmt->num_rows > 0) {
+                    // Bind result to a variable
+                    $stmt->bind_result($userpass, $userid, $useremail, $tags);
+                }
+            } else {
+                $stmt = $conn->prepare("SELECT p_password, p_name, p_email FROM professors WHERE p_username = ?");
+                $stmt->bind_param("s", $username); // "s" means the parameter is a string
+                $stmt->execute();
+                $stmt->store_result();
                 if ($stmt->num_rows > 0) {
                     // Bind result to a variable
                     $stmt->bind_result($userpass, $userid, $useremail);
-                    $stmt->fetch();
-    
-                    // Verify the password
-                    if ($userpass == $password) {
-                        $_SESSION['username'] = $username;
-                        $_SESSION['usertype'] = $usertype;
-                        $_SESSION['name'] = $userid;
-                        $_SESSION['email'] = $useremail;
-                        $_SESSION['password'] = $password;
-                        header("Location: ../dashboard/home.php");
-                        exit();
-            
-                    } else {
-                        $error = "Invalid password!";
-            
-                    }
-                } else {
-                    $error = "Invalid username!";
                 }
             }
-            $stmt->close();       
-        } else if(empty($username)){
-            $error = "Invalid username!";
 
-        } else if(empty($password)){
-            $error = "Invalid password!";
+            $stmt->fetch();
             
-
-        } else if(empty($usertype)){
-            $error = "Invalid user type!";
+            // Verify the password
+            if ($userpass == $password) {
+                $_SESSION['username'] = $username;
+                $_SESSION['usertype'] = $usertype;
+                $_SESSION['name'] = $userid;
+                $_SESSION['email'] = $useremail;
+                $_SESSION['password'] = $password;
+                $_SESSION['tags'] = $tags;
+                header("Location: ../dashboard/home.php");
+                exit();
+            } else {
+                $error = "Invalid password!";
+            }
+        } else {
+            $error = "Invalid username!";
         }
+            $stmt->close();       
+    } else if(empty($username)){
+            $error = "Invalid username!";
+    } else if(empty($password)){
+        $error = "Invalid password!";
+    } else if(empty($usertype)){
+        $error = "Invalid user type!";
     }
+}
 
 if (!empty($error)) {
     echo "<script type='text/javascript'>
