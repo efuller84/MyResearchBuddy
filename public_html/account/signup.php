@@ -101,37 +101,43 @@ $conn->close();
     <title>Sign Up</title>
 
     <style>
-        .dropdown {
-            position: relative;
-            display: inline-block;
-        }
+    .submit-btn {
+        margin-top: 60px; /* Adds space above the Sign Up button */
+    }
 
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #f9f9f9;
-            min-width: 300px;
-            padding: 10px;
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-            z-index: 1;
-        }
+    /* Other CSS remains the same */
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
 
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 300px;
+        padding: 10px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+    }
 
-        .dropdown-content label {
-            display: block;
-            margin-bottom: 5px;
-        }
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
 
-        /* CSS Grid for 5 columns */
-        .checkbox-grid {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 10px;
-        }
-    </style>
+    .dropdown-content label {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .checkbox-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr); 
+        gap: 10px;
+    }
+</style>
+
+
 
 </head>
 <body>
@@ -157,13 +163,18 @@ $conn->close();
         <input type="password" name="rePassword" id="rePassword" required>
         <br><br>
 
-        <!-- Dropdown to select whether the user is a Student or Professor -->
-        <label for="userType">Are you a:</label>
-        <select id="userType" name="userType" onchange="toggleTagsDropdown()">
-            <option value="student">Student</option>
-            <option value="professor">Professor</option>
-        </select>
+       <!-- Buttons to select whether the user is a Student or Professor -->
+        <label>Are you a:</label>
         <br><br>
+        <input type="radio" id="student" name="userType" value="student" onclick="toggleTagsDropdown()">
+        <label for="student">Student</label>
+
+        <br><br>
+
+        <input type="radio" id="professor" name="userType" value="professor" onclick="toggleTagsDropdown()">
+        <label for="professor">Professor</label>
+
+    <br><br>
 
         <!-- Tags dropdown for students (initially hidden) -->
         <div class="dropdown" id="tagsDropdown" style="display:none;">
@@ -184,20 +195,20 @@ $conn->close();
         <input type="submit" value="Sign Up">
     </form>
 
-    <!-- JavaScript to validate passwords and show/hide tags dropdown -->
     <script>
-        // Show/Hide the tags dropdown based on the selected user type
-        function toggleTagsDropdown() {
-            var userType = document.getElementById('userType').value;
-            var tagsDropdown = document.getElementById('tagsDropdown');
-            
-            if (userType === 'student') {
-                tagsDropdown.style.display = 'block'; // Show the tags dropdown for students
-            } else {
-                tagsDropdown.style.display = 'none'; // Hide the tags dropdown for professors
-            }
+    // Show/Hide the tags dropdown based on the selected user type
+    function toggleTagsDropdown() {
+        var studentSelected = document.getElementById('student').checked;
+        var tagsDropdown = document.getElementById('tagsDropdown');
+        
+        if (studentSelected) {
+            tagsDropdown.style.display = 'block'; // Show the tags dropdown for students
+        } else {
+            tagsDropdown.style.display = 'none'; // Hide the tags dropdown for professors
         }
-
+    }
+    </script>
+    <script>
         // Validate the form to check if passwords match
         function validateForm() {
             var password = document.getElementById('password').value;
