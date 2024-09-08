@@ -5,7 +5,7 @@ USE my_database;
 CREATE TABLE Students (
     student_id INT AUTO_INCREMENT PRIMARY KEY,
     s_username VARCHAR(20) NOT NULL UNIQUE,
-    s_name VARCHAR(255) NOT NULL,
+    s_name VARCHAR(20) NOT NULL,
     s_password VARCHAR(255) NOT NULL,
     s_email VARCHAR(100) NOT NULL UNIQUE,
     tags VARCHAR(255),
@@ -31,7 +31,7 @@ INSERT INTO tags (id, tag_name) VALUES
 CREATE TABLE Professors (
     professor_id INT AUTO_INCREMENT PRIMARY KEY,
     p_username VARCHAR(20) NOT NULL UNIQUE,
-    p_name VARCHAR(255) NOT NULL,
+    p_name VARCHAR(20) NOT NULL,
     p_password VARCHAR(255) NOT NULL,
     p_email VARCHAR(100) NOT NULL UNIQUE,
     current_projects VARCHAR(255),

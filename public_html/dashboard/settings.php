@@ -24,27 +24,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Collect form data
     $name = trim($_POST['name']);
     $email = trim($_POST['email']);
-    $password = password_hash(trim($_POST['password']), PASSWORD_DEFAULT); // Hash the password for security
+    $password = trim($_POST['password']); 
 
     if ($usertype == "Student") {
-        $sql = "UPDATE students SET s_name = :name, s_email = :email, s_password = :password WHERE s_username = :username";
+        $stmt = $conn->prepare("UPDATE students SET s_name = ?, s_email = ?, s_password = ? WHERE s_username = ?");
     } else {
-        $sql = "UPDATE professors SET p_name = :name, p_email = :email, p_password = :password WHERE p_username = :username"; 
+        $stmt = $conn->prepare("UPDATE professors SET p_name = ?, p_email = ?, p_password = ? WHERE p_username = ?"); 
     }
-    // SQL query to update user info
-    
-    // Prepare the SQL statement
-    $stmt = $conn->prepare($sql);
 
     // Bind the form data to the query
-    $stmt->bindParam(':name', $name);
-    $stmt->bindParam(':email', $email);
-    $stmt->bindParam(':password', $password);
-    $stmt->bindParam(':username', $username);
+    $stmt->bind_param('ssss', $name, $email, $password, $username);
 
     // Execute the query
     $stmt->execute();
 
+    $_SESSION['name'] = $name;
+    $_SESSION['email'] = $email;
+    $_SESSION['password'] = $password;
     // Redirect to a success page
     header("Location: home.php");
     exit();
