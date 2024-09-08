@@ -54,22 +54,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     }
                 } else {
                     $error = "Invalid username.";
-                    header("Location: ../dashboard/dashboard.php");
+                    //header("Location: ../dashboard/dashboard.php");
                     exit();
                 }
             }
             $stmt->close();       
         } else if(empty($username)){
             $error = "Invalid username!";
-            header("Location: ../dashboard/dashboard.php");
+            //header("Location: ../dashboard/dashboard.php");
 
         } else if(empty($password)){
             $error = "Invalid password!";
-            header("Location: ../dashboard/dashboard.php");
+            //header("Location: ../dashboard/dashboard.php");
 
         } else if(empty($usertype)){
             $error = "Invalid user type!";
-            header("Location: ../dashboard/dashboard.php");
+            //header("Location: ../dashboard/dashboard.php");
         }
     }
 
@@ -93,11 +93,11 @@ $conn->close();
 </head>
 <body>
     <h2>Sign In</h2>
-    <form action="" method="post">
+    <form method="post" action="">
     <label for="usertype">Sign in as:</label>
     <select id="usertype" name="usertype">
-        <option value="student">Student</option>
-        <option value="professor">Professor</option>
+        <option value="Student" selected>Student</option>
+        <option value="Professor">Professor</option>
     </select>
         <br><br>
         <label for="username">Username:</label>
