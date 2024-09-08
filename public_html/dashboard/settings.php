@@ -285,31 +285,31 @@ $conn->close();
                             echo '<div class="checkbox-grid">';
 
                                 echo '<label><input type="checkbox" name="tags[]" value="1"';
-                                    if (in_array("1", $_SESSION["tags"])) {
+                                    if (in_array("1", $tags)) {
                                         echo ' checked';
                                     }
                                 echo '> AI</label>';
 
                                 echo '<label><input type="checkbox" name="tags[]" value="2"';
-                                    if (in_array('2', $_SESSION['tags'])) {
+                                    if (in_array('2', $tags)) {
                                         echo ' checked';
                                     }
                                 echo '> Machine Learning</label>';
                                 
                                 echo '<label><input type="checkbox" name="tags[]" value="3"';
-                                    if (in_array('3', $_SESSION['tags'])) {
+                                    if (in_array('3', $tags)) {
                                         echo ' checked';
                                     }
                                 echo '> Data Science</label>';
                                 
                                 echo '<label><input type="checkbox" name="tags[]" value="4"';
-                                if (in_array('4', $_SESSION['tags'])) {
+                                if (in_array('4', $tags)) {
                                     echo ' checked';
                                 }
                                 echo '> Robotics</label>';
                                 
                                 echo '<label><input type="checkbox" name="tags[]" value="5"';
-                                if (in_array('5', $_SESSION['tags'])) {
+                                if (in_array('5', $tags)) {
                                     echo ' checked';
                                 }
                                 echo '> Quantum Computing</label>';

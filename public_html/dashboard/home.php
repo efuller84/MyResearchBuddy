@@ -6,6 +6,7 @@ $usertype = $_SESSION['usertype'];
 $name = $_SESSION['name'];
 $useremail = $_SESSION['email']; 
 $password = $_SESSION['password'];
+$tags = $_SESSION['tags'];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Unset all session variables
