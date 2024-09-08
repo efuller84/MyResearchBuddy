@@ -16,17 +16,21 @@ if ($conn->connect_error) {
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Check if the username and password are set
-    if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['userType'])) {
+    if (isset($_POST['username']) && isset($_POST['password'])) {
         $username = trim($_POST['username']);
         $password = trim($_POST['password']);
-        $usertype = trim($_POST['userType']);
+        $usertypeS = trim($_POST['userTypeS']);
+        $usertypeP = trim($_POST['userTypeP']);
+        $usertype = "";
 
         // Check if fields are not empty
-        if (!empty($username) && !empty($password) && !empty($usertype)) {
-            if($usertype == "userTypeS") {
-                $stmt = $conn->prepare("SELECT s_password FROM Students WHERE s_name = ?");
+        if (!empty($username) && !empty($password)) {
+            if($usertypeS == "on") {
+                $usertype = "Student";
+                $stmt = $conn->prepare("SELECT s_password FROM students WHERE s_username = ?");
             } else {
-                $stmt = $conn->prepare("SELECT p_password FROM Professors WHERE p_name = ?");
+                $usertype = "Professor";
+                $stmt = $conn->prepare("SELECT p_password FROM professors WHERE p_username = ?");
             }
                 $stmt->bind_param("s", $username); // "s" means the parameter is a string
                 $stmt->execute();
@@ -42,8 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     if (password_verify($password, $hashed_password)) {
                         $_SESSION['username'] = $username;
                         $_SESSION['userType'] = $usertype;
-                        echo "Login successful!";
-                        header("Location: dashboard/dashboard.php");
+                        header("Location: ../dashboard/dashboard.php");
                         exit();
             
                     } else {
@@ -53,18 +56,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     }
                 } else {
                     $error = "Invalid username.";
+                    header("Location: ../dashboard/dashboard.php");
                     exit();
                 }
             }
             $stmt->close();       
         } else if(empty($username)){
             $error = "Invalid username!";
+            header("Location: ../dashboard/dashboard.php");
 
         } else if(empty($password)){
             $error = "Invalid password!";
+            header("Location: ../dashboard/dashboard.php");
 
         } else if(empty($usertype)){
             $error = "Invalid user type!";
+            header("Location: ../dashboard/dashboard.php");
         }
     }
 
@@ -90,9 +97,9 @@ $conn->close();
     <h2>Sign In</h2>
     <form action="" method="post">
         <label for="userTypeS">Student: </label>
-        <input type="radio" id="userTypeS" name="userType">
+        <input type="radio" id="userTypeS" name="userTypeS">
         <label for="userTypeP">Professor: </label>
-        <input type="radio" id="userTypeP" name="userType">
+        <input type="radio" id="userTypeP" name="userTypeP">
         <br><br>
         <label for="username">Username:</label>
         <input type="text" name="username" id="username" required>
