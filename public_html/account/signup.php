@@ -45,7 +45,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $stmt->bind_param("sssss", $username, $name, $hashed_password, $email, $tags_str);
 
                     if ($stmt->execute()) {
-                        echo "Student sign-up successful!";
+                        $_SESSION['username'] = $username;
+                        $_SESSION['userType'] = $usertype;
+                        header("Location: ../dashboard/dashboard.php");
+                        exit();
                     } else {
                         $error = "Error signing up as student. Please try again.";
                     }
