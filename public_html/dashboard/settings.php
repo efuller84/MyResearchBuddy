@@ -30,11 +30,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $name = trim($_POST['name']);
         $email = trim($_POST['email']);
         $password = trim($_POST['password']); 
-        //UPDATE THIS FOR TAG BACK TO IMPLODE
+
         if ($usertype == "Student") {
-            $tags = trim($_POST['tags']);
-            $stmt = $conn->prepare("UPDATE students SET s_name = ?, s_email = ?, s_password = ?, tags = ?, WHERE s_username = ?");
-            $stmt->bind_param('sssss', $name, $email, $password, $tags, $username);
+            $tags_string = trim(implode(',', $_POST['tags']));
+            $stmt = $conn->prepare("UPDATE students SET s_name = ?, s_email = ?, s_password = ?, tags = ? WHERE s_username = ?");
+            $stmt->bind_param('sssss', $name, $email, $password, $tags_string, $username);
+            $_SESSION['tags'] = $_POST['tags']; 
         } else {
             $stmt = $conn->prepare("UPDATE professors SET p_name = ?, p_email = ?, p_password = ? WHERE p_username = ?"); 
             $stmt->bind_param('ssss', $name, $email, $password, $username);
@@ -48,6 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION['name'] = $name;
         $_SESSION['email'] = $email;
         $_SESSION['password'] = $password;
+        
         // Redirect to a success page
         header("Location: home.php");
         exit();
