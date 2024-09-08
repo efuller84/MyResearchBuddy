@@ -45,14 +45,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $capacity_current = $_POST['capacity_current'];
     $capacity_total = $_POST['capacity_total'];
-    $is_archived = $_POST['project_status'] === 'archive' ? 1 : 0; // Radio button to determine status
+    $is_archived = $_POST['project_status'] === 'archive' ? 1 : 0;; // Radio button to determine status
+    $project_application_link = $_POST['project_application_link'];
 
     // SQL to insert project
-    $sql = "INSERT INTO Projects (professor_id, project_name, project_location, project_description, tags, capacity_current, capacity_total, is_archived)
-            VALUES ('$professor_id', '$project_name', '$project_location', '$project_description', '$tags_str', '$capacity_current', '$capacity_total', '$is_archived')";
+    $sql = "INSERT INTO Projects (professor_id, project_name, project_location, project_description, tags, capacity_current, capacity_total, is_archived, project_application_link)
+            VALUES ('$professor_id', '$project_name', '$project_location', '$project_description', '$tags_str', '$capacity_current', '$capacity_total', '$is_archived', '$project_application_link')";
 
     if ($conn->query($sql) === TRUE) {
-        echo "New project created successfully";
+        header("Location: ../dashboard/home.php");
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
@@ -113,7 +114,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         input[type="text"],
         input[type="email"],
         input[type="password"]
-        input[type="number"] {
+        input[type="number"] 
+        input[type="link"] {
             width: 100%;
             padding: 10px;
             margin-bottom: 20px;
@@ -142,6 +144,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             font-size: 16px;
             font-weight: bold;
             transition: background-color 0.3s ease;
+            margin-bottom: 20px;
         }
 
         .submit-btn:hover {
@@ -164,6 +167,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         .dropdown {
             margin-top: 20px;
+        }
+
+        .back-btn {
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            width: 100%;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background-color: #0056b3;
         }
 
         .dropdown button {
@@ -215,10 +235,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <label for="project_description">Project Description:</label>
             <input type="text" name="project_description" required>
 
-           <!-- Buttons to select whether the user is a Student or Professor -->
-            <div class="radio-group">
-                <label for="student"><input type="radio" id="student" name="userType" value="student" onclick="toggleTagsDropdown()"> Current</label>
-                <label for="professor"><input type="radio" id="professor" name="userType" value="professor" onclick="toggleTagsDropdown()"> Archived</label>
+            <label for="capacity_current">Selected Applicants:</label>
+            <input type="number" id="capacity_current" name="capacity_current" required><br>
+            <br>
+            <label for="capacity_total">Capacity:</label>
+            <input type="number" id="capacity_total" name="capacity_total" required><br>
+            <br>
+            <label for="project_application_link">Project Application Link (optional):</label>
+            <input type="link" name="project_application_link">
+            <br>
+            <div class="project_status">
+                <br>
+                <label for="current"><input type="radio" id="current" name="project_status" value="current"> Current</label>
+                <label for="archive"><input type="radio" id="archive" name="project_status" value="archive"> Archived</label>
             </div>
 
             <!-- Tags dropdown for students (initially hidden) -->
@@ -235,14 +264,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
             </div> <br>
 
-            <label for="capacity_current">Total Capacity:</label>
-            <input type="number" id="capacity_current" name="capacity_current" required><br>
-            <br>
-            <label for="capacity_total">Total Capacity:</label>
-            <input type="number" id="capacity_total" name="capacity_total" required><br>
-
             <br>
             <input type="submit" value="Create Project" class="submit-btn">
+            <!-- Go Back Button -->
+            <button type="button" class="back-btn" onclick="window.history.back()">Never mind</button>
         </form>
 
     </div>
