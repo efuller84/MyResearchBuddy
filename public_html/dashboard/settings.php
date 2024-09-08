@@ -23,14 +23,13 @@ $password = $_SESSION['password'];
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Collect form data
     $name = trim($_POST['name']);
-    $username = trim($_POST['username']);
     $email = trim($_POST['email']);
     $password = password_hash(trim($_POST['password']), PASSWORD_DEFAULT); // Hash the password for security
 
     if ($usertype == "Student") {
-        $sql = "UPDATE students SET username = :username, email = :email, password = :password WHERE id = :userId";
+        $sql = "UPDATE students SET s_name = :name, s_email = :email, s_password = :password WHERE s_username = :username";
     } else {
-        
+        $sql = "UPDATE professors SET p_name = :name, p_email = :email, p_password = :password WHERE p_username = :username"; 
     }
     // SQL query to update user info
     
@@ -38,10 +37,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt = $conn->prepare($sql);
 
     // Bind the form data to the query
-    $stmt->bindParam(':username', $username);
+    $stmt->bindParam(':name', $name);
     $stmt->bindParam(':email', $email);
     $stmt->bindParam(':password', $password);
-    $stmt->bindParam(':userId', $userId);
+    $stmt->bindParam(':username', $username);
 
     // Execute the query
     $stmt->execute();
