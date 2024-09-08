@@ -21,6 +21,7 @@ CREATE TABLE tags (
 INSERT INTO tags (id, tag_name) VALUES
 (1, 'AI'),
 (2, 'Machine Learning'),
+
 (3, 'Data Science'),
 (4, 'Robotics'),
 (5, 'Quantum Computing');
