@@ -25,10 +25,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (!empty($username) && !empty($password)) {
             if($usertype == "Student") {
                 //$usertype = "Student";
-                $stmt = $conn->prepare("SELECT s_password FROM students WHERE s_username = ?");
+                $stmt = $conn->prepare("SELECT s_password, s_name FROM students WHERE s_username = ?");
             } else {
                 //$usertype = "Professor";
-                $stmt = $conn->prepare("SELECT p_password FROM professors WHERE p_username = ?");
+                $stmt = $conn->prepare("SELECT p_password, p_name FROM professors WHERE p_username = ?");
             }
                 $stmt->bind_param("s", $username); // "s" means the parameter is a string
                 $stmt->execute();
@@ -37,13 +37,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 // Check if the user exists
                 if ($stmt->num_rows > 0) {
                     // Bind result to a variable
-                    $stmt->bind_result($userpass);
+                    $stmt->bind_result($userpass, $userid);
                     $stmt->fetch();
     
                     // Verify the password
                     if ($userpass == $password) {
                         $_SESSION['username'] = $username;
                         $_SESSION['usertype'] = $usertype;
+                        $_SESSION['name'] = $userid;
                         header("Location: ../dashboard/dashboard.php");
                         exit();
             

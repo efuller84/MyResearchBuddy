@@ -3,6 +3,7 @@ session_start();
 
 $username = $_SESSION['username'];
 $usertype = $_SESSION['usertype'];
+$name = $_SESSION['name'];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Unset all session variables
@@ -88,7 +89,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </head>
     <body>
     <div class="user-info-box">
-        <p>Hello, <strong><?php echo htmlspecialchars($username); ?></strong></p>
+        <p>Hello, <strong><?php echo htmlspecialchars($name); ?></strong></p>
         <p>Your user type is: <strong><?php echo htmlspecialchars($usertype); ?></strong></p>
         <br>
         <center><button class="small-btn" onclick="window.location.href='editprofile.php';">Edit Profile</button></center>
