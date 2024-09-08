@@ -251,7 +251,7 @@ $conn->close();
             <label for="username">Username:</label>
             <input type="text" name="username" id="username" required>
 
-            <label for="name">Full Name (Max Length: 20 characters): </label>
+            <label for="name">Full Name (Max length of 20 characters!): </label>
             <input type="text" name="name" id="name"  required>
 
             <label for="email">Email:</label>

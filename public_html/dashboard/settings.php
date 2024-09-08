@@ -176,7 +176,7 @@ $conn->close();
         </center>
         <br>
         <form action="" method="post" onsubmit="confirmButton(event)">
-            <label for="name">Name</label>
+            <label for="name">Name (Max length of 20 characters!):</label>
             <input type="text" id="name" name="name" value="<?php echo htmlspecialchars($_SESSION['name']); ?>" required>
 
             <label for="email">Email</label>

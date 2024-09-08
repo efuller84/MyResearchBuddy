@@ -9,7 +9,7 @@ CREATE TABLE Students (
     s_email VARCHAR(100) NOT NULL UNIQUE,
     tags VARCHAR(255),
     field_of_research VARCHAR(255),
-    project_list VARCHAR(255),
+    project_list VARCHAR(255)
 );
 
 
