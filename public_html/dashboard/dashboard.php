@@ -3,7 +3,6 @@ session_start();
 
 $username = $_SESSION['username'];
 $usertype = $_SESSION['usertype'];
-exit();
 ?>
 
 <!DOCTYPE html>
