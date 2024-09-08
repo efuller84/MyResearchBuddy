@@ -5,6 +5,7 @@ $username = $_SESSION['username'];
 $usertype = $_SESSION['usertype'];
 $name = $_SESSION['name'];
 $useremail = $_SESSION['email']; 
+$password = $_SESSION['password'];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Unset all session variables
@@ -151,7 +152,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <p><center><strong><?php echo htmlspecialchars($name); ?></strong><center></p>
                     <p><center><strong><?php echo htmlspecialchars($usertype); ?></strong><center></p>
                     <br>
-                    <center><button class="small-btn" onclick="window.location.href='editprofile.php';">Edit Account Settings</button></center>
+                    <center><button class="small-btn" onclick="window.location.href='settings.php';">Edit Account Settings</button></center>
                     <form action="" method="post">
                         <button type="submit" class="sign-out-btn">Sign Out</button>
                     </form>

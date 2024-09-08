@@ -18,6 +18,7 @@ $username = $_SESSION['username'];
 $usertype = $_SESSION['usertype'];
 $name = $_SESSION['name'];
 $email = $_SESSION['email'];
+$password = $_SESSION['password'];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Collect form data
@@ -187,7 +188,7 @@ $conn->close();
             <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($_SESSION['email']); ?>" required>
 
             <label for="password">Password</label>
-            <input type="password" id="password" name="password" value="<?php echo htmlspecialchars($_SESSION['email']); ?>" required>
+            <input type="password" id="password" name="password" value="<?php echo htmlspecialchars($_SESSION['password']); ?>" required>
 
             <!-- Confirm Button -->
             <button type="submit" class="submit-btn">Apply changes</button>
