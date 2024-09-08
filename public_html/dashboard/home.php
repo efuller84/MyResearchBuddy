@@ -179,7 +179,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['search_text'])) {
             padding-top: 150px;
             padding-left: 20px;
         }
-.search-box {
+
+.       .search-box {
             margin-bottom: 20px;
         }
 
@@ -253,12 +254,127 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['search_text'])) {
             background-color: #218838;
         }
 
+        /* General body styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Top bar styling */
+        .top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #007bff; /* Top bar background color */
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        /* Container for left section (image + Dashboard text) */
+        .top-bar .left {
+            display: flex;
+            align-items: center;
+        }
+
+        /* Styling for the image in the top-left */
+        .top-bar .left img {
+            height: 150px; /* Adjust size of the image */
+            margin-right: 10px;
+        }
+
+        /* Dashboard text styling */
+        .top-bar .center {
+            font-size: 24px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        /* Adjust the right section */
+        .top-bar .right {
+            position: relative;
+            max-width: 300px; /* Ensures the box doesn't overscan */
+        }
+
+        /* Container for user info box */
+        .user-info-box {
+            background-color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            font-family: 'Arial', sans-serif;
+            color: #333;
+            font-size: 14px;
+            max-width: 100%; /* Ensures the box doesn't overflow */
+            box-sizing: border-box;
+            white-space: nowrap; /* Prevents text from breaking to new lines */
+        }
+
+        .user-info-box strong {
+            font-weight: bold;
+            color: #5cb85c;
+        }
+
+        .user-info-box p {
+            margin: 5px 0;
+            line-height: 1.5;
+        }
+
+        /* Smaller button above sign out button */
+        .user-info-box .small-btn {
+            background-color: #007bff;
+            color: white;
+            padding: 8px;
+            border: none;
+            border-radius: 5px;
+            width: 80%;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .user-info-box .small-btn:hover {
+            background-color: #0056b3;
+        }
+
+        /* Sign out button */
+        .user-info-box .sign-out-btn {
+            background-color: #5cb85c;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            width: 100%;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .user-info-box .sign-out-btn:hover {
+            background-color: #4cae4c;
+        }
+
+        /* Padding for main content below the top bar */
+        .main-content {
+            padding-top: 80px; /* Adjust to leave space for the fixed top bar */
+        }
+
     </style>
 </head>
 <body>
     <div class="top-bar">
         <div class="left">
-            <img src="../MyResearchBuddy.png" height="150" width="150" alt="My Research Buddy Logo">
+            <img src="../logo.png" height="150" width="150" alt="My Research Buddy Logo">
         </div>
         <div class="center">
             My Research Buddy <i><div style="font-size: 10px; text-align: right">v1.0h - Hackathon Edition</div></i>
@@ -268,7 +384,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['search_text'])) {
                 <p><center><strong><?php echo htmlspecialchars($name); ?></strong><center></p>
                 <p><center><strong><?php echo htmlspecialchars($usertype); ?></strong><center></p>
                 <br>
-                <center><button class="small-btn" onclick="window.location.href='settings.php';">Edit Account Settings</button></center>
+                <center><button class="small-btn" onclick="window.location.href='settings.php';">Settings</button></center>
                 <form action="" method="post">
                     <button type="submit" class="sign-out-btn" name="sign_out">Sign Out</button>
                 </form>
@@ -279,7 +395,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['search_text'])) {
     <div class="main-content">
         <?php if ($usertype == 'Student'): ?>
 
-<!-- Search Box -->
             <div class="search-box">
                 <form method="post" action="">
                     <input type="text" name="search_text" placeholder="Search for projects..." required>
