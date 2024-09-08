@@ -143,7 +143,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <img src="../../MyResearchBuddy.png" height="150" width="150" alt="My Research Buddy Logo">
             </div>
             <div class="center">
-                My Research Buddy <i><div style="font-size: 10px; text-align: right">v1.0 Alpha</div></i>
+                My Research Buddy <i><div style="font-size: 10px; text-align: right">v1.1h - Hackathon Edition</div></i>
             </div>
             <div class ="right">
                 <div class="user-info-box">

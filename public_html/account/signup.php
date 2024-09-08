@@ -25,7 +25,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $email = trim($_POST['email']);
         $userType = trim($_POST['userType']);
         $name = trim($_POST['name']);
-        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
         // Ensure fields are not empty and passwords match
         if (!empty($username) && !empty($password) && !empty($userType) && !empty($email) && $password === $rePassword) {
@@ -44,7 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $tags_str = implode(",", $tags); // Convert selected tag IDs to a comma-separated string
 
                     $stmt = $conn->prepare("INSERT INTO Students (s_username, s_name, s_password, s_email, field_of_research) VALUES (?, ?, ?, ?, ?)");
-                    $stmt->bind_param("sssss", $username, $name, $hashed_password, $email, $tags_str);
+                    $stmt->bind_param("sssss", $username, $name, $password, $email, $tags_str);
 
                     if ($stmt->execute()) {
                         // Set session variables and redirect to dashboard
@@ -68,7 +67,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $error = "Username already exists. Please choose a different username.";
                 } else {
                     $stmt = $conn->prepare("INSERT INTO Professors (p_username, p_name, p_password, p_email) VALUES (?, ?, ?, ?)");
-                    $stmt->bind_param("ssss", $username, $name, $hashed_password, $email);
+                    $stmt->bind_param("ssss", $username, $name, $password, $email);
 
                     if ($stmt->execute()) {
                         // Set session variables and redirect to dashboard
