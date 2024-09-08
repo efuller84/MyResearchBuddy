@@ -19,17 +19,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['username']) && isset($_POST['password'])) {
         $username = trim($_POST['username']);
         $password = trim($_POST['password']);
-        $usertypeS = trim($_POST['userTypeS']);
-        $usertypeP = trim($_POST['userTypeP']);
-        $usertype = "";
+        $usertype = trim($_POST['usertype']);
 
         // Check if fields are not empty
         if (!empty($username) && !empty($password)) {
-            if($usertypeS == "on") {
-                $usertype = "Student";
+            if($usertype == "Student") {
+                //$usertype = "Student";
                 $stmt = $conn->prepare("SELECT s_password FROM students WHERE s_username = ?");
             } else {
-                $usertype = "Professor";
+                //$usertype = "Professor";
                 $stmt = $conn->prepare("SELECT p_password FROM professors WHERE p_username = ?");
             }
                 $stmt->bind_param("s", $username); // "s" means the parameter is a string
@@ -45,7 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     // Verify the password (assuming passwords are hashed)
                     if (password_verify($password, $hashed_password)) {
                         $_SESSION['username'] = $username;
-                        $_SESSION['userType'] = $usertype;
+                        $_SESSION['usertype'] = $usertype;
                         header("Location: ../dashboard/dashboard.php");
                         exit();
             
@@ -96,10 +94,11 @@ $conn->close();
 <body>
     <h2>Sign In</h2>
     <form action="" method="post">
-        <label for="userTypeS">Student: </label>
-        <input type="radio" id="userTypeS" name="userTypeS">
-        <label for="userTypeP">Professor: </label>
-        <input type="radio" id="userTypeP" name="userTypeP">
+    <label for="usertype">Sign in as:</label>
+    <select id="usertype" name="usertype">
+        <option value="student">Student</option>
+        <option value="professor">Professor</option>
+    </select>
         <br><br>
         <label for="username">Username:</label>
         <input type="text" name="username" id="username" required>

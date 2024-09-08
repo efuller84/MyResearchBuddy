@@ -2,12 +2,8 @@
 session_start();
 
 $username = $_SESSION['username'];
-$usertype = $_SESSION['userType'];
-// Check if the session is set
-if (isset($_SESSION['username']) || isset($_SESSION['userType'])) {
-    echo "Welcome, " . $_SESSION['username'] . "!";
-    echo "You are logged in as " . $_SESSION['userType'];
-}
+$usertype = $_SESSION['usertype'];
+exit();
 ?>
 
 <!DOCTYPE html>
