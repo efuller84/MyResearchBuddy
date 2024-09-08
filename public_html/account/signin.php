@@ -103,6 +103,6 @@ $conn->close();
         <input type="submit" value="Sign In">
     </form>
     <br>
-    <p>No account? Sign up <a href="signup.html">here</a>.</p>
+    <p>No account? Sign up <a href="signup.php">here</a>.</p>
 </body>
 </html>
